@@ -14,12 +14,17 @@ typedef enum : NSUInteger {
     StarRateWhole,
     StarRateHalf,
 } StarRateType;
+
+typedef void (^SelectedStarBlock)(CGFloat rate); //选择后的结果block
 @interface StarRateView : UIView
 @property (nonatomic, assign) NSInteger starCount;//星星数量
 @property (nonatomic, assign) NSInteger starSpace;//星星间距
+@property (nonatomic, assign) NSInteger defaultCount;//默认显示的星星
+
 @property (nonatomic, strong) UIImage * unSelectStarImage;
 @property (nonatomic, strong) UIImage * selectedStarImage;
 @property (nonatomic, assign) StarRateType rateType;
+@property (nonatomic, copy) SelectedStarBlock block;
 @end
 
 NS_ASSUME_NONNULL_END

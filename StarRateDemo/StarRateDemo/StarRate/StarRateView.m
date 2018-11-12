@@ -19,8 +19,10 @@
     self = [super init];
     if (self) {
         [self setuViews];
-        [self initData];
+        [self initGesture];
         [self configLayout];
+//        [self setupConfig];
+
     }
     return self;
 }
@@ -29,8 +31,10 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self setuViews];
-        [self initData];
+        [self initGesture];
         [self configLayout];
+//        [self setupConfig];
+
     }
     return self ;
 }
@@ -44,18 +48,20 @@
     [self addSubview:self.selectStarBgView];
     self.selectStarBgView.clipsToBounds = YES;
 
-    
-   
 }
 
--(void)initData{
+//-(void)setupConfig{
+//    self.defaultCount = 3;
+//    self.starSpace = 10;
+//    self.starCount  =5;
+//}
+
+-(void)initGesture{
     UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureEvent:)];
-    
     [self addGestureRecognizer:tapGesture];
     
     UIPanGestureRecognizer * pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panGesture:)];
     [self addGestureRecognizer:pan];
-    
 }
 
 - (void)configLayout{
@@ -190,6 +196,10 @@
         
     }];
     
+    if (self.block) {
+        self.block(ratio);
+    }
+    
  
 }
 
@@ -211,6 +221,9 @@
 
 }
 
+-(void)setStarSpace:(NSInteger)starSpace{
+    _starSpace = starSpace;
+}
 
 -(void)setStarCount:(NSInteger)starCount{
     _starCount = starCount;
@@ -225,15 +238,19 @@
         CGRect imageFrame = CGRectMake(i ? (self.starSize.width + self.starSpace) * i + self.starSpace :  self.starSpace, 0, self.starSize.width, self.starSize.height);
         
         unSelectStarIv.frame = imageFrame;
-        
         selectedStarIv.frame = imageFrame;
-        
-        
     }
     
 }
 
-
+-(void)setDefaultCount:(NSInteger)defaultCount{
+    
+    NSInteger defalut = defaultCount<=0 ? 0:(defaultCount>=self.starCount ? self.starCount:defaultCount);
+    _defaultCount = defalut;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.selectStarBgView.frame = CGRectMake(0, 0, defalut*(self.starSize.width+self.starSpace), self.starSize.height);
+    }];
+}
 
 -(CGSize)starSize{
     return CGSizeMake(self.frame.size.height, self.frame.size.height);
